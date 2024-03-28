@@ -1,28 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerControls : MonoBehaviour
 {
     private Rigidbody2D m_rigidbody;
-    private Vector2 m_movement;
-    private Vector2 m_smoothMovement;
-    private Vector2 m_smoothVelocity;
-    [SerializeField]
-    private float m_speed;
+
+    private bool m_grounded;
+   
+
     void Awake()
     {
         m_rigidbody = GetComponent<Rigidbody2D>();
     }
-    void FixedUpdate()
+    void Update()
     {
-        m_smoothMovement = Vector2.SmoothDamp(m_smoothMovement, m_movement, ref m_smoothVelocity, 0.3f);
-        m_rigidbody.velocity = m_smoothMovement * m_speed;
+        if(Input.GetKeyDown(KeyCode.O)){
+            Jump();
+        }
     }
-    void OnMove(InputValue input)
+    private void Jump(){
+        if(m_grounded){
+            m_rigidbody.AddForce(Vector2.up * 10f, ForceMode2D.Impulse);
+        }
+    }
+    void OnCollisionEnter2D(Collision2D other)
     {
-        m_movement = input.Get<Vector2>();
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            m_grounded = true;
+        }
+        if (other.gameObject.CompareTag("Obstacle"))
+        {
+            Debug.Log("Game over");
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            m_grounded = false;
+        }
+    }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Player_jump"))
+        {
+            Jump();
+        }
     }
 }
