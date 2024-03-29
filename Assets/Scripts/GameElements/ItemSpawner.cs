@@ -41,7 +41,7 @@ public class ItemSpawner : MonoBehaviour
     {
         m_obstaclePool.Release(obstacle);
     }
-    private void Spawn()
+    public void Spawn()
     {
         ObstacleController obstacle = m_obstaclePool.Get();
         obstacle.transform.SetPositionAndRotation(m_spawnpointLow.position, m_spawnpointLow.rotation);
