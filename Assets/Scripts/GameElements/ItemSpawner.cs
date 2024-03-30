@@ -32,10 +32,10 @@ public class ItemSpawner : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Spawn();
-        }
+        // if (Input.GetKeyDown(KeyCode.P))
+        // {
+        //     Spawn();
+        // }
     }
     private void OnObstacleDelete(ObstacleController obstacle)
     {

@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerControls : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D m_rigidbody;
 
     private bool m_grounded;
-   
+    public UnityAction m_onDeath;
 
     void Awake()
     {
@@ -16,12 +17,14 @@ public class PlayerControls : MonoBehaviour
     }
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.O)){
-            Jump();
-        }
+        // if(Input.GetKeyDown(KeyCode.O)){
+        //     Jump();
+        // }
     }
-    private void Jump(){
-        if(m_grounded){
+    private void Jump()
+    {
+        if (m_grounded)
+        {
             m_rigidbody.AddForce(Vector2.up * 10f, ForceMode2D.Impulse);
         }
     }
@@ -34,6 +37,7 @@ public class PlayerControls : MonoBehaviour
         if (other.gameObject.CompareTag("Obstacle"))
         {
             Debug.Log("Game over");
+            m_onDeath?.Invoke();
         }
     }
 
