@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Tile : MonoBehaviour
 {
     public UnityAction<Tile> m_onTileClick;
-    public PuzzleConfigSO m_config;
+    public PuzzleConfigSO m_config; //TODO: keep this as private and get and set it through functions
     [SerializeField]
     private Image m_icon;
     [SerializeField]
@@ -45,6 +45,7 @@ public class Tile : MonoBehaviour
     }
     public void TileSelected(bool approvedClick)
     {
+        //TODO:Rename, need the bool param?
         m_selected = !m_selected;
         Debug.Log(m_selected);
         if (m_selected)
@@ -56,13 +57,11 @@ public class Tile : MonoBehaviour
             m_background.color = m_unSelectedColor;
 
         }
-        //todo : rename
-        //this is called from manager if this tile is okay to interact with
     }
-    void TileUnselected()
-    {
-
+    public void TileCleared(PuzzleConfigSO newConfig) {
+        
+        m_config = newConfig;
+        m_icon.sprite = m_config.Image;
     }
-    void TileCleared() { }
 
 }

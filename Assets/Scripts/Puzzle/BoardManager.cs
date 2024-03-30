@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
     [SerializeField]
     private ItemSpawner m_spawner;
-    private int m_boardWidth = 4;
-    private int m_boardHeight = 4;
+    private int m_boardWidth = 3;
+    private int m_boardHeight = 3;
     [SerializeField]
     private GameObject m_tilePrefab;
     [SerializeField]
@@ -36,16 +37,14 @@ public class BoardManager : MonoBehaviour
                 GameObject tile = Instantiate(m_tilePrefab);
                 tile.transform.SetParent(transform);
                 tile.GetComponent<Tile>().m_onTileClick += TileClicked;
-                int randomIndex = Random.Range(0, m_tileConfigs.Count);
-                tile.GetComponent<Tile>().TileInit(m_tileConfigs[randomIndex], new Vector2(i, j));
-                m_tiles[i, j] = tile.GetComponent<Tile>();
+                tile.GetComponent<Tile>().TileInit(GetRandomConfig(), new Vector2(j, i));
+                tile.name = j.ToString() + "," + i.ToString();
+                m_tiles[j, i] = tile.GetComponent<Tile>();
             }
         }
     }
     void TileClicked(Tile tile)
     {
-        Debug.Log("TileClicked " + tile.m_config.tileType);
-
         if (m_selectedTiles.Count == 0)
         {
             m_selectedTiles.Add(tile);
@@ -55,30 +54,27 @@ public class BoardManager : MonoBehaviour
         // m_selectedTiles is not empty, but is selected tile next to previously selected one
         if (!IsTileAdjacent(m_selectedTiles[m_selectedTiles.Count - 1], tile))
         {
-            Debug.Log("tile not adjacent");
             ResetSelection(tile);
             return;
         }
-        Debug.Log("tile adjacent");
         if (m_selectedTiles[m_selectedTiles.Count - 1].m_config.tileType == tile.m_config.tileType)
         {
-            Debug.Log("selected tiles not empty, clicked is same as stored");
             m_selectedTiles.Add(tile);
             tile.TileSelected(true);
             if (m_selectedTiles.Count == 3)
             {
-                Debug.Log("selected enough");
                 foreach (var selectedTile in m_selectedTiles)
                 {
                     selectedTile.TileSelected(true);
+                    selectedTile.m_config = null;
                 }
                 m_selectedTiles.Clear();
+                UpdateBoard();
                 m_spawner.Spawn();
             }
         }
         else
         {
-            Debug.Log("selected tiles not empty, selected NOT a match");
             ResetSelection(tile);
         }
     }
@@ -108,5 +104,41 @@ public class BoardManager : MonoBehaviour
         m_selectedTiles.Clear();
         m_selectedTiles.Add(newTile);
         newTile.TileSelected(true);
+    }
+
+    private void UpdateBoard()
+    {
+        for (int i = m_boardWidth - 1; i >= 0; i--)
+        {
+            for (int j = m_boardHeight - 1; j >= 0; j--)
+            {
+                if (m_tiles[j, i].m_config == null)
+                {
+                    m_tiles[j, i].TileCleared(TakeAboveConfig(m_tiles[j, i].m_coordinates));
+                }
+            }
+        }
+    }
+    private PuzzleConfigSO TakeAboveConfig(Vector2 clearedTile)
+    {
+        PuzzleConfigSO newConfig = null;
+        int yOffset = 1;
+        while (newConfig == null && yOffset <= clearedTile.y)
+        {
+            Vector2 arrayIndex = new Vector2(clearedTile.x, clearedTile.y - yOffset);
+            newConfig = m_tiles[(int)arrayIndex.x, (int)arrayIndex.y].m_config;
+            m_tiles[(int)arrayIndex.x, (int)arrayIndex.y].m_config = null;
+            yOffset++;
+        }
+        if (newConfig != null)
+        {
+            return newConfig;
+        }
+        return GetRandomConfig();
+    }
+    private PuzzleConfigSO GetRandomConfig()
+    {
+        int randomIndex = Random.Range(0, m_tileConfigs.Count);
+        return m_tileConfigs[randomIndex];
     }
 }
