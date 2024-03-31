@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Drawing;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +17,14 @@ public class GameManager : MonoBehaviour
     private GameObject m_startView;
     [SerializeField]
     private GameObject m_endView;
+    [SerializeField]
+    private TMP_Text m_finalScoreText;
+    
+    void Start(){
+        m_menuCanvas.enabled = true;
+        m_startView.SetActive(true);
+        m_endView.SetActive(false);
+    }
     public void StartGame()
     {
         m_menuCanvas.enabled = false;
@@ -24,9 +34,14 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         m_scoreCounter.StopCounter();
-        int finalScore = m_scoreCounter.GetFinalScore();
+        m_finalScoreText.text = m_scoreCounter.GetFinalScore().ToString();
         m_menuCanvas.enabled = true;
         m_startView.SetActive(false);
         m_endView.SetActive(true);
+    }
+    public void RestartGame()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
     }
 }
