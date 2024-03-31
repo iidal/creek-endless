@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
 {
-    public UnityAction<Tile> m_onTileClick;
+    public UnityAction<Tile> m_onTileSelect;
+    public UnityAction<Tile> m_onTileUnselect;
     public PuzzleConfigSO m_config; //TODO: keep this as private and get and set it through functions
     [SerializeField]
     private Image m_icon;
@@ -16,8 +17,8 @@ public class Tile : MonoBehaviour
     private Color m_selectedColor;
     [SerializeField]
     private Color m_unSelectedColor;
-    private bool m_selected = false;
-    public Vector2 m_coordinates; 
+    public bool m_selected = false;
+    public Vector2 m_coordinates;
     void Start()
     {
 
@@ -28,38 +29,37 @@ public class Tile : MonoBehaviour
         m_icon.sprite = m_config.Image;
         m_coordinates = coordinates;
     }
-    public void OnTileClicked()
+    //Called when player clicks a tile
+    public void OnTileClick()
     {
-
-        m_onTileClick?.Invoke(this);
-
-        // logic implemented here and board manager
-        //is some tile already clicked
-        //if yes, this needs to be same type as that
-        //if not same, return or switch active
-        // is this location next to previously clicked
-        //if not return or switch active
-        //is this the third selected?
-        //if yes, clear, etc
-        //if not, just add to selected
-    }
-    public void TileSelected(bool approvedClick)
-    {
-        //TODO:Rename, need the bool param?
-        m_selected = !m_selected;
-        Debug.Log(m_selected);
-        if (m_selected)
-        {
-            m_background.color = m_selectedColor;
-        }
         if (!m_selected)
         {
-            m_background.color = m_unSelectedColor;
-
+            m_onTileSelect?.Invoke(this);
+        }
+        else
+        {
+            m_onTileUnselect?.Invoke(this);
         }
     }
-    public void TileCleared(PuzzleConfigSO newConfig) {
+    //Called from BoardManager after it has decided the correct action
+    public void OnTileSelect()
+    {
+        m_selected = true;
+        m_background.color = m_selectedColor;
         
+    }
+    //Called from BoardManager after it has decided the correct action
+    public void OnTileUnselect()
+    {
+        m_selected = false;
+        m_background.color = m_unSelectedColor;
+       
+    }
+    //Called when tile is "deleted" and a new config is assigned to it
+    public void TileCleared(PuzzleConfigSO newConfig)
+    {
+        m_selected = false;
+        m_background.color = m_unSelectedColor;
         m_config = newConfig;
         m_icon.sprite = m_config.Image;
     }

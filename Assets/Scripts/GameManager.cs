@@ -19,8 +19,9 @@ public class GameManager : MonoBehaviour
     private GameObject m_endView;
     [SerializeField]
     private TMP_Text m_finalScoreText;
-    
-    void Start(){
+
+    void Start()
+    {
         m_menuCanvas.enabled = true;
         m_startView.SetActive(true);
         m_endView.SetActive(false);

@@ -16,6 +16,8 @@ public class BoardManager : MonoBehaviour
     private Tile[,] m_tiles;
 
     private List<Tile> m_selectedTiles = new List<Tile>();
+    [SerializeField]
+    private BoardChecker m_boardChecker;
 
     void Start()
     {
@@ -36,10 +38,39 @@ public class BoardManager : MonoBehaviour
             {
                 GameObject tile = Instantiate(m_tilePrefab);
                 tile.transform.SetParent(transform);
-                tile.GetComponent<Tile>().m_onTileClick += TileClicked;
+                tile.GetComponent<Tile>().m_onTileSelect += TileClicked;
+                tile.GetComponent<Tile>().m_onTileUnselect += TileUnclicked;
                 tile.GetComponent<Tile>().TileInit(GetRandomConfig(), new Vector2(j, i));
                 tile.name = j.ToString() + "," + i.ToString();
                 m_tiles[j, i] = tile.GetComponent<Tile>();
+            }
+        }
+        ShuffleBoard();
+    }
+    void TileUnclicked(Tile tile)
+    {
+        //remove from selected tiles
+        for (int i = 0; i < m_selectedTiles.Count; i++)
+        {
+            if (tile.m_coordinates == m_selectedTiles[i].m_coordinates)
+            {
+                if (i == m_selectedTiles.Count - 1)
+                {
+                    //unselecting the last selection
+                    m_selectedTiles.RemoveAt(i);
+                    tile.OnTileUnselect();
+                    return;
+                }
+                else if (i < m_selectedTiles.Count - 1)
+                {
+                    // unselect also the tiles selected after this one
+                    for (int j = i; j < m_selectedTiles.Count; j++)
+                    {
+                        m_selectedTiles[j].OnTileUnselect();
+                    }
+                    m_selectedTiles.RemoveRange(i, m_selectedTiles.Count-i);
+                    return;
+                }
             }
         }
     }
@@ -48,7 +79,7 @@ public class BoardManager : MonoBehaviour
         if (m_selectedTiles.Count == 0)
         {
             m_selectedTiles.Add(tile);
-            tile.TileSelected(true);
+            tile.OnTileSelect();
             return;
         }
         // m_selectedTiles is not empty, but is selected tile next to previously selected one
@@ -60,12 +91,12 @@ public class BoardManager : MonoBehaviour
         if (m_selectedTiles[m_selectedTiles.Count - 1].m_config.tileType == tile.m_config.tileType)
         {
             m_selectedTiles.Add(tile);
-            tile.TileSelected(true);
+            tile.OnTileSelect();
             if (m_selectedTiles.Count == 3)
             {
                 foreach (var selectedTile in m_selectedTiles)
                 {
-                    selectedTile.TileSelected(true);
+                    selectedTile.OnTileUnselect();
                     selectedTile.m_config = null;
                 }
                 m_selectedTiles.Clear();
@@ -77,6 +108,16 @@ public class BoardManager : MonoBehaviour
         {
             ResetSelection(tile);
         }
+    }
+    private void ResetSelection(Tile newTile)
+    {
+        foreach (var selectedTile in m_selectedTiles)
+        {
+            selectedTile.OnTileUnselect();
+        }
+        m_selectedTiles.Clear();
+        m_selectedTiles.Add(newTile);
+        newTile.OnTileSelect();
     }
     private bool IsTileAdjacent(Tile prevTile, Tile newTile)
     {
@@ -95,16 +136,7 @@ public class BoardManager : MonoBehaviour
         }
         return false;
     }
-    private void ResetSelection(Tile newTile)
-    {
-        foreach (var selectedTile in m_selectedTiles)
-        {
-            selectedTile.TileSelected(false);
-        }
-        m_selectedTiles.Clear();
-        m_selectedTiles.Add(newTile);
-        newTile.TileSelected(true);
-    }
+
 
     private void UpdateBoard()
     {
@@ -117,6 +149,11 @@ public class BoardManager : MonoBehaviour
                     m_tiles[j, i].TileCleared(TakeAboveConfig(m_tiles[j, i].m_coordinates));
                 }
             }
+        }
+        if (!m_boardChecker.AvailableMoves(m_tiles, m_boardWidth, m_boardHeight))
+        {
+            Debug.Log("NO AVAILABLE MOVES");
+            ShuffleBoard();
         }
     }
     private PuzzleConfigSO TakeAboveConfig(Vector2 clearedTile)
@@ -140,5 +177,19 @@ public class BoardManager : MonoBehaviour
     {
         int randomIndex = Random.Range(0, m_tileConfigs.Count);
         return m_tileConfigs[randomIndex];
+    }
+    private void ShuffleBoard()
+    {
+        while (!m_boardChecker.AvailableMoves(m_tiles, m_boardWidth, m_boardHeight))
+        {
+            Debug.Log("Shuffle, if more than one of this line, had to shuffle again");
+            for (int i = 0; i < m_boardWidth; i++)
+            {
+                for (int j = 0; j < m_boardHeight; j++)
+                {
+                    m_tiles[i, j].TileCleared(GetRandomConfig());
+                }
+            }
+        }
     }
 }
