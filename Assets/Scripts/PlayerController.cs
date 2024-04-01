@@ -19,17 +19,11 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (m_grounded || !m_doubleJumped)
-        {
-            if(!m_grounded)
-            {
-                m_doubleJumped = true;
-                Debug.Log("DOUBLE JUMp");
-            }
-            float jumpForce = m_doubleJumped ? 13f : 9f;
-            m_rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        }
+
+        m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, 0f);
+        m_rigidbody.AddForce(Vector2.up * 8f, ForceMode2D.Impulse);
     }
+
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
@@ -55,7 +49,20 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player_jump"))
         {
-            Jump();
+            if (m_grounded)
+            {
+                Jump();
+
+            }
+        }
+        if (other.gameObject.CompareTag("Player_doubleJump"))
+        {
+            if (!m_doubleJumped)
+            {
+                Jump();
+                m_doubleJumped = true;
+            }
+
         }
     }
 }

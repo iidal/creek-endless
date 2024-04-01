@@ -14,20 +14,50 @@ public class ObstacleController : MonoBehaviour
     [SerializeField]
     private SpriteRenderer m_image;
     [SerializeField]
+    private List<CircleCollider2D> m_playerActionTriggers;
+    [SerializeField]
     private float speed = 3.0f;
+    private PuzzleConfigSO m_config;
+
     void Start()
     {
         m_rigidbody = GetComponent<Rigidbody2D>();
     }
-    public void Setup(PuzzleConfigSO config){
-        m_image.sprite = config.obstacleImage;
-    }
+
     void FixedUpdate()
     {
         m_rigidbody.velocity = Vector2.left * speed;
     }
-    void OnTriggerEnter2D(Collider2D collider){
-        if(collider.CompareTag("Boundary")){
+    public void Setup(PuzzleConfigSO config)
+    {
+        m_config = config;
+        m_image.sprite = config.obstacleImage;
+        SetTriggers();
+
+    }
+    void SetTriggers()
+    {
+        Debug.Log("set triggers");
+        if (m_config.spawnPoint == "low")
+        {
+            foreach (var trigger in m_playerActionTriggers)
+            {
+                trigger.gameObject.tag = "Player_jump";
+            }
+        }
+        else if (m_config.spawnPoint == "middle")
+        {
+            foreach (var trigger in m_playerActionTriggers)
+            {
+                trigger.gameObject.tag = "Player_doubleJump";
+            }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.CompareTag("Boundary"))
+        {
             m_onDeleteObstacle?.Invoke(this);
         }
     }

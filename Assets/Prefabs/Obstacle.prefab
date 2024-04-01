@@ -262,6 +262,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_image: {fileID: 518845626878456476}
+  m_playerActionTriggers:
+  - {fileID: 5074669321028386348}
+  - {fileID: 2748676157295857640}
+  - {fileID: 4153720318286477393}
   speed: 3
 --- !u!61 &7856749358260012563
 BoxCollider2D:
