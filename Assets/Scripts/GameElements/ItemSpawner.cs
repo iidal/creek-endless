@@ -41,10 +41,20 @@ public class ItemSpawner : MonoBehaviour
     {
         m_obstaclePool.Release(obstacle);
     }
-    public void Spawn()
+    public void Spawn(PuzzleConfigSO config)
     {
         ObstacleController obstacle = m_obstaclePool.Get();
-        obstacle.transform.SetPositionAndRotation(m_spawnpointLow.position, m_spawnpointLow.rotation);
+        Transform spawnPos;
+        if(config.spawnPoint == "top"){
+            spawnPos = m_spawnpointHigh;
+        }
+        else if(config.spawnPoint == "middle"){
+            spawnPos = m_spawnpointMiddle;
+        }
+        else {
+            spawnPos = m_spawnpointLow;
+        }
+        obstacle.transform.SetPositionAndRotation(spawnPos.position, spawnPos.rotation);
         obstacle.m_onDeleteObstacle += OnObstacleDelete;
     }
     private ObstacleController CreateObstacle()

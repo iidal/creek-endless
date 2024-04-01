@@ -5,5 +5,7 @@ public class PuzzleConfigSO : ScriptableObject
 {
     public string tileType;
     public Sprite Image;
-    public GameObject spawnItem;
+    public string spawnPoint;
+    public Sprite obstacleImage;
+    public float speed;
 }

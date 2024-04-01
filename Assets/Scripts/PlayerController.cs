@@ -7,25 +7,27 @@ using UnityEngine.Events;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D m_rigidbody;
-
+    [SerializeField]
     private bool m_grounded;
+    private bool m_doubleJumped = false;
     public UnityAction m_onDeath;
 
     void Awake()
     {
         m_rigidbody = GetComponent<Rigidbody2D>();
     }
-    void Update()
-    {
-        // if(Input.GetKeyDown(KeyCode.O)){
-        //     Jump();
-        // }
-    }
+
     private void Jump()
     {
-        if (m_grounded)
+        if (m_grounded || !m_doubleJumped)
         {
-            m_rigidbody.AddForce(Vector2.up * 10f, ForceMode2D.Impulse);
+            if(!m_grounded)
+            {
+                m_doubleJumped = true;
+                Debug.Log("DOUBLE JUMp");
+            }
+            float jumpForce = m_doubleJumped ? 13f : 9f;
+            m_rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
     }
     void OnCollisionEnter2D(Collision2D other)
@@ -33,6 +35,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             m_grounded = true;
+            m_doubleJumped = false;
         }
         if (other.gameObject.CompareTag("Obstacle"))
         {

@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileType: wood
   Image: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-  spawnItem: {fileID: 2397047601890855091, guid: 505e08deddba3a147ba3380747df1a3f, type: 3}
+  spawnPoint: low
+  obstacleImage: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  speed: 3

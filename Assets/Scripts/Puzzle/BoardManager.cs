@@ -68,7 +68,7 @@ public class BoardManager : MonoBehaviour
                     {
                         m_selectedTiles[j].OnTileUnselect();
                     }
-                    m_selectedTiles.RemoveRange(i, m_selectedTiles.Count-i);
+                    m_selectedTiles.RemoveRange(i, m_selectedTiles.Count - i);
                     return;
                 }
             }
@@ -94,6 +94,7 @@ public class BoardManager : MonoBehaviour
             tile.OnTileSelect();
             if (m_selectedTiles.Count == 3)
             {
+                m_spawner.Spawn(tile.m_config);
                 foreach (var selectedTile in m_selectedTiles)
                 {
                     selectedTile.OnTileUnselect();
@@ -101,7 +102,7 @@ public class BoardManager : MonoBehaviour
                 }
                 m_selectedTiles.Clear();
                 UpdateBoard();
-                m_spawner.Spawn();
+
             }
         }
         else
