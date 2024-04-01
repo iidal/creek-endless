@@ -54,6 +54,7 @@ public class ItemSpawner : MonoBehaviour
         else {
             spawnPos = m_spawnpointLow;
         }
+        obstacle.Setup(config);
         obstacle.transform.SetPositionAndRotation(spawnPos.position, spawnPos.rotation);
         obstacle.m_onDeleteObstacle += OnObstacleDelete;
     }
