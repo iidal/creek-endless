@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91b59aec759c5ff45a63cd87e2421520, type: 3}
-  m_Name: StoneTile
+  m_Name: FireTile
   m_EditorClassIdentifier: 
-  tileType: stone
-  Image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  spawnPoint: low
-  obstacleImage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  speed: 3
+  tileType: fire
+  Image: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  spawnPoint: middle
+  obstacleImage: {fileID: 2747690628134850419, guid: 16037dbd798344f57a526d53d48f5ead, type: 3}
+  speed: 5

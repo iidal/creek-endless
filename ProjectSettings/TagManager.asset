@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - Player_jump
   - Obstacle
+  - Player_doubleJump
   layers:
   - Default
   - TransparentFX

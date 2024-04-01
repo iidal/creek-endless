@@ -43,15 +43,22 @@ public class ItemSpawner : MonoBehaviour
     }
     public void Spawn(PuzzleConfigSO config)
     {
+        if (config.tileType == "empty")
+        {
+            return;
+        }
         ObstacleController obstacle = m_obstaclePool.Get();
         Transform spawnPos;
-        if(config.spawnPoint == "top"){
+        if (config.spawnPoint == "top")
+        {
             spawnPos = m_spawnpointHigh;
         }
-        else if(config.spawnPoint == "middle"){
+        else if (config.spawnPoint == "middle")
+        {
             spawnPos = m_spawnpointMiddle;
         }
-        else {
+        else
+        {
             spawnPos = m_spawnpointLow;
         }
         obstacle.Setup(config);

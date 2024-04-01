@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Unity.VisualStudio.Editor;
+using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,12 +17,15 @@ public class ObstacleController : MonoBehaviour
     [SerializeField]
     private List<CircleCollider2D> m_playerActionTriggers;
     [SerializeField]
+    private GameObject m_obstacleTop;
+    [SerializeField]
     private float speed = 3.0f;
     private PuzzleConfigSO m_config;
 
     void Start()
     {
         m_rigidbody = GetComponent<Rigidbody2D>();
+        m_obstacleTop.SetActive(false);
     }
 
     void FixedUpdate()
@@ -37,20 +41,36 @@ public class ObstacleController : MonoBehaviour
     }
     void SetTriggers()
     {
-        Debug.Log("set triggers");
-        if (m_config.spawnPoint == "low")
+        if (m_config.tileType == "fire")
         {
-            foreach (var trigger in m_playerActionTriggers)
-            {
-                trigger.gameObject.tag = "Player_jump";
-            }
+            SetTriggerProps(true, "Player_doubleJump");
         }
-        else if (m_config.spawnPoint == "middle")
+        else if (m_config.tileType == "stone")
         {
-            foreach (var trigger in m_playerActionTriggers)
-            {
-                trigger.gameObject.tag = "Player_doubleJump";
-            }
+            SetTriggerProps(true, "Player_jump");
+            m_obstacleTop.SetActive(true);
+        }
+        else if (m_config.tileType == "wood")
+        {
+            SetTriggerProps(true, "Player_jump");
+            m_obstacleTop.SetActive(true);
+        }
+        else if (m_config.tileType == "storm")
+        {
+            SetTriggerProps(false, "Untagged");
+        }
+        else
+        {
+            SetTriggerProps(false, "Untagged");
+        }
+
+    }
+    private void SetTriggerProps(bool setOn, string tagName)
+    {
+        foreach (var trigger in m_playerActionTriggers)
+        {
+            trigger.gameObject.SetActive(setOn);
+            trigger.gameObject.tag = tagName;
         }
     }
 
@@ -58,6 +78,8 @@ public class ObstacleController : MonoBehaviour
     {
         if (collider.CompareTag("Boundary"))
         {
+            SetTriggerProps(false, "Untagged");
+            m_obstacleTop.SetActive(false);
             m_onDeleteObstacle?.Invoke(this);
         }
     }

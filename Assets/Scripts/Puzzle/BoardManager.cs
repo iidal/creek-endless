@@ -7,8 +7,8 @@ public class BoardManager : MonoBehaviour
 {
     [SerializeField]
     private ItemSpawner m_spawner;
-    private int m_boardWidth = 3;
-    private int m_boardHeight = 3;
+    private int m_boardWidth = 5;
+    private int m_boardHeight = 5;
     [SerializeField]
     private GameObject m_tilePrefab;
     [SerializeField]

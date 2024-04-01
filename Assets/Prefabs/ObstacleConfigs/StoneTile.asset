@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91b59aec759c5ff45a63cd87e2421520, type: 3}
-  m_Name: StormTile
+  m_Name: StoneTile
   m_EditorClassIdentifier: 
-  tileType: storm
-  Image: {fileID: 21300000, guid: cc7e65fd16d39483aa18d865a68e9451, type: 3}
-  spawnPoint: top
-  obstacleImage: {fileID: 21300000, guid: 50d3cd2f336704fcf9cf5b293c10ba9c, type: 3}
-  speed: 4
+  tileType: stone
+  Image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  spawnPoint: low
+  obstacleImage: {fileID: 21300000, guid: 1214a7ec362a4479ba225757639c24f2, type: 3}
+  speed: 3
