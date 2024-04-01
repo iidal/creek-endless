@@ -45,12 +45,12 @@ public class ObstacleController : MonoBehaviour
         {
             SetTriggerProps(true, "Player_doubleJump");
         }
-        else if (m_config.tileType == "stone")
+        else if (m_config.tileType == "ice")
         {
             SetTriggerProps(true, "Player_jump");
             m_obstacleTop.SetActive(true);
         }
-        else if (m_config.tileType == "wood")
+        else if (m_config.tileType == "poison")
         {
             SetTriggerProps(true, "Player_jump");
             m_obstacleTop.SetActive(true);

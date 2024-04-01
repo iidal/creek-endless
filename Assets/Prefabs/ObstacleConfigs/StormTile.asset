@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StormTile
   m_EditorClassIdentifier: 
   tileType: storm
-  Image: {fileID: 21300000, guid: cc7e65fd16d39483aa18d865a68e9451, type: 3}
+  Image: {fileID: 2062015785, guid: 080cb6d98b00c2645b2c41df5f69bc78, type: 3}
   spawnPoint: top
-  obstacleImage: {fileID: -2135585597343286014, guid: 4b2a04fdbe0ef4d8da8f90eaca817cd1, type: 3}
+  obstacleImage: {fileID: 2062015785, guid: 080cb6d98b00c2645b2c41df5f69bc78, type: 3}
   speed: 4

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FireTile
   m_EditorClassIdentifier: 
   tileType: fire
-  Image: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  Image: {fileID: 695775810, guid: 080cb6d98b00c2645b2c41df5f69bc78, type: 3}
   spawnPoint: middle
-  obstacleImage: {fileID: 2747690628134850419, guid: 16037dbd798344f57a526d53d48f5ead, type: 3}
+  obstacleImage: {fileID: 695775810, guid: 080cb6d98b00c2645b2c41df5f69bc78, type: 3}
   speed: 5
