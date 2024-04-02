@@ -7,8 +7,8 @@ public class BoardManager : MonoBehaviour
 {
     [SerializeField]
     private ItemSpawner m_spawner;
-    private int m_boardWidth = 6;
-    private int m_boardHeight = 6;
+    private int m_boardWidth = 5;
+    private int m_boardHeight = 5;
     [SerializeField]
     private GameObject m_tilePrefab;
     [SerializeField]
@@ -36,15 +36,20 @@ public class BoardManager : MonoBehaviour
         {
             for (int j = 0; j < m_boardHeight; j++)
             {
-                GameObject tile = Instantiate(m_tilePrefab);
-                tile.transform.SetParent(transform);
+                GameObject tile = Instantiate(m_tilePrefab, Vector2.zero, Quaternion.identity, transform);
                 tile.GetComponent<Tile>().m_onTileSelect += TileClicked;
                 tile.GetComponent<Tile>().m_onTileUnselect += TileUnclicked;
                 tile.GetComponent<Tile>().TileInit(GetRandomConfig(), new Vector2(j, i));
                 tile.name = j.ToString() + "," + i.ToString();
                 m_tiles[j, i] = tile.GetComponent<Tile>();
             }
+
         }
+        //TODO: fix this super dirty hack
+        // Had to add second camera for showing particle systems on canvas, that broke showing the puzzle canvas, quickest fix was to move the board-object at runtime...
+        Vector3 currentPosition = gameObject.GetComponent<RectTransform>().anchoredPosition3D;
+        currentPosition.z = currentPosition.z + 10f;
+        gameObject.GetComponent<RectTransform>().anchoredPosition3D = currentPosition;
         ShuffleBoard();
     }
     void TileUnclicked(Tile tile)
@@ -97,6 +102,7 @@ public class BoardManager : MonoBehaviour
                 m_spawner.Spawn(tile.m_config);
                 foreach (var selectedTile in m_selectedTiles)
                 {
+                    selectedTile.TileEffects();
                     selectedTile.OnTileUnselect();
                     selectedTile.m_config = null;
                 }
@@ -188,6 +194,7 @@ public class BoardManager : MonoBehaviour
             {
                 for (int j = 0; j < m_boardHeight; j++)
                 {
+                    m_tiles[i, j].TileEffects();
                     m_tiles[i, j].TileCleared(GetRandomConfig());
                 }
             }

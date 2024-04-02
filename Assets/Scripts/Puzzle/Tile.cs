@@ -14,6 +14,8 @@ public class Tile : MonoBehaviour
     [SerializeField]
     private Image m_background;
     [SerializeField]
+    private ParticleSystem m_burst;
+    [SerializeField]
     private Color m_selectedColor;
     [SerializeField]
     private Color m_unSelectedColor;
@@ -46,14 +48,18 @@ public class Tile : MonoBehaviour
     {
         m_selected = true;
         m_background.color = m_selectedColor;
-        
+
     }
     //Called from BoardManager after it has decided the correct action
     public void OnTileUnselect()
     {
         m_selected = false;
         m_background.color = m_unSelectedColor;
-       
+
+    }
+    public void TileEffects()
+    {
+        m_burst.Play();
     }
     //Called when tile is "deleted" and a new config is assigned to it
     public void TileCleared(PuzzleConfigSO newConfig)
