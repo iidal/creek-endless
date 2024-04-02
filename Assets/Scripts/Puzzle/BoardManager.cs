@@ -102,7 +102,7 @@ public class BoardManager : MonoBehaviour
                 m_spawner.Spawn(tile.m_config);
                 foreach (var selectedTile in m_selectedTiles)
                 {
-                    selectedTile.TileEffects();
+                    selectedTile.TileEffects("clear");
                     selectedTile.OnTileUnselect();
                     selectedTile.m_config = null;
                 }
@@ -153,6 +153,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (m_tiles[j, i].m_config == null)
                 {
+                    m_tiles[j,i].TileEffects("slide");
                     m_tiles[j, i].TileCleared(TakeAboveConfig(m_tiles[j, i].m_coordinates));
                 }
             }
@@ -194,7 +195,7 @@ public class BoardManager : MonoBehaviour
             {
                 for (int j = 0; j < m_boardHeight; j++)
                 {
-                    m_tiles[i, j].TileEffects();
+                    m_tiles[i, j].TileEffects("clear");
                     m_tiles[i, j].TileCleared(GetRandomConfig());
                 }
             }

@@ -224,6 +224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_config: {fileID: 0}
   m_icon: {fileID: 5078531968348411256}
+  m_iconRect: {fileID: 6378701351795666658}
   m_background: {fileID: 4324232173181441714}
   m_burst: {fileID: 4172721914991608677}
   m_selectedColor: {r: 0.41509432, g: 0.24886703, b: 0.17034532, a: 1}
