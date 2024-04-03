@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PlayerController m_playerController;
     [SerializeField]
+    private ItemSpawner m_obstacleSpawner;
+    [SerializeField]
     private Canvas m_menuCanvas;
     [SerializeField]
     private GameObject m_startView;
@@ -35,10 +37,19 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         m_scoreCounter.StopCounter();
+        m_obstacleSpawner.enabled = false;
+        //delete all obstacles
+        //disable puzzle from touch
+        StartCoroutine(ShowEndMenu());
+    }
+    IEnumerator ShowEndMenu()
+    {
+        yield return new WaitForSeconds(3f);
         m_finalScoreText.text = m_scoreCounter.GetFinalScore().ToString();
         m_menuCanvas.enabled = true;
         m_startView.SetActive(false);
         m_endView.SetActive(true);
+
     }
     public void RestartGame()
     {

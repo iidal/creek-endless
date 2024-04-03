@@ -29,18 +29,6 @@ public class ItemSpawner : MonoBehaviour
             defaultCapacity: 10
         );
     }
-
-    void Update()
-    {
-        // if (Input.GetKeyDown(KeyCode.P))
-        // {
-        //     Spawn();
-        // }
-    }
-    private void OnObstacleDelete(ObstacleController obstacle)
-    {
-        m_obstaclePool.Release(obstacle);
-    }
     public void Spawn(PuzzleConfigSO config)
     {
         if (config.tileType == "empty")
@@ -65,6 +53,10 @@ public class ItemSpawner : MonoBehaviour
         obstacle.transform.SetPositionAndRotation(spawnPos.position, spawnPos.rotation);
         obstacle.m_onDeleteObstacle += OnObstacleDelete;
     }
+    private void OnObstacleDelete(ObstacleController obstacle)
+    {
+        m_obstaclePool.Release(obstacle);
+    }
     private ObstacleController CreateObstacle()
     {
         ObstacleController obstacle = Instantiate(m_obstaclePrefab, Vector2.zero, Quaternion.identity);
@@ -82,6 +74,6 @@ public class ItemSpawner : MonoBehaviour
     }
     private void OnObstacleDestroy(ObstacleController obstacle)
     {
-        Destroy(obstacle);
+        Destroy(obstacle.gameObject);
     }
 }
