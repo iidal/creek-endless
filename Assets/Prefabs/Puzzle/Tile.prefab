@@ -226,7 +226,7 @@ MonoBehaviour:
   m_icon: {fileID: 5078531968348411256}
   m_background: {fileID: 4324232173181441714}
   m_burst: {fileID: 4172721914991608677}
-  m_selectedColor: {r: 0.08627451, g: 0.3529412, b: 0.3019608, a: 1}
+  m_selectedColor: {r: 0.22160903, g: 0.52201253, b: 0.46193182, a: 1}
   m_unSelectedColor: {r: 0.6117647, g: 0.67058825, b: 0.69803923, a: 1}
   m_selected: 0
   m_coordinates: {x: 0, y: 0}
