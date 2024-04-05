@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.Events;
+using UnityEngine.Android;
 
 
 public class ItemSpawner : MonoBehaviour
@@ -52,6 +53,9 @@ public class ItemSpawner : MonoBehaviour
         obstacle.Setup(config);
         obstacle.transform.SetPositionAndRotation(spawnPos.position, spawnPos.rotation);
         obstacle.m_onDeleteObstacle += OnObstacleDelete;
+    }
+    public void ClearObstacles(){
+        m_obstaclePool.Clear();
     }
     private void OnObstacleDelete(ObstacleController obstacle)
     {

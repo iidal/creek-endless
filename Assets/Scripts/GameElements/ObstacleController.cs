@@ -16,7 +16,7 @@ public class ObstacleController : MonoBehaviour
     [SerializeField]
     private GameObject m_obstacleTop;
     [SerializeField]
-    private float speed = 3.0f;
+    private float m_speed = 3.0f;
     private PuzzleConfigSO m_config;
 
     void Start()
@@ -27,12 +27,13 @@ public class ObstacleController : MonoBehaviour
 
     void FixedUpdate()
     {
-        m_rigidbody.velocity = Vector2.left * speed;
+        m_rigidbody.velocity = Vector2.left * m_speed;
     }
     public void Setup(PuzzleConfigSO config)
     {
         m_config = config;
         m_image.sprite = config.obstacleImage;
+        m_speed = m_config.speed;
         SetTriggers();
 
     }

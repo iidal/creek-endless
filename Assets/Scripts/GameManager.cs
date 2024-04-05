@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         m_scoreCounter.StopCounter();
+        m_obstacleSpawner.ClearObstacles(); //TODO does this work?
         m_obstacleSpawner.enabled = false;
         //delete all obstacles
         //disable puzzle from touch

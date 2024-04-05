@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BoardManager : MonoBehaviour
 {
@@ -18,6 +21,8 @@ public class BoardManager : MonoBehaviour
     private List<Tile> m_selectedTiles = new List<Tile>();
     [SerializeField]
     private BoardChecker m_boardChecker;
+    [SerializeField]
+    private TMP_Text m_boardShuffledText;
 
     void Start()
     {
@@ -50,6 +55,8 @@ public class BoardManager : MonoBehaviour
         Vector3 currentPosition = gameObject.GetComponent<RectTransform>().anchoredPosition3D;
         currentPosition.z = currentPosition.z + 10f;
         gameObject.GetComponent<RectTransform>().anchoredPosition3D = currentPosition;
+        // dirty fix end
+
         ShuffleBoard();
     }
     void TileUnclicked(Tile tile)
@@ -153,7 +160,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (m_tiles[j, i].m_config == null)
                 {
-                    m_tiles[j,i].TileEffects("slide");
+                    m_tiles[j, i].TileEffects("slide");
                     m_tiles[j, i].TileCleared(TakeAboveConfig(m_tiles[j, i].m_coordinates));
                 }
             }
@@ -161,6 +168,7 @@ public class BoardManager : MonoBehaviour
         if (!m_boardChecker.AvailableMoves(m_tiles, m_boardWidth, m_boardHeight))
         {
             Debug.Log("NO AVAILABLE MOVES");
+            StartCoroutine(BoardShuffledText());
             ShuffleBoard();
         }
     }
@@ -200,5 +208,22 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+    }
+    IEnumerator BoardShuffledText()
+    {
+        m_boardShuffledText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        m_boardShuffledText.color = new Color(m_boardShuffledText.color.r, m_boardShuffledText.color.g, m_boardShuffledText.color.b, 1);
+        float alpha = m_boardShuffledText.color.a;
+
+        while (m_boardShuffledText.color.a > 0)
+        {
+            alpha -= Time.deltaTime / 1f;
+            m_boardShuffledText.color = new Color(m_boardShuffledText.color.r, m_boardShuffledText.color.g, m_boardShuffledText.color.b, alpha);
+
+            yield return new WaitForSeconds(0.01f); // Todo0.01 to slow!!!
+        }
+        m_boardShuffledText.gameObject.SetActive(false);
+
     }
 }
