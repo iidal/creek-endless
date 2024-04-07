@@ -6,3 +6,7 @@ this project is a submission for __Games Job Fair Spring 2024 - Unity Programmin
 
 
 Download this game at itch: [vdii.itch.io/frosty-feud](https://vdii.itch.io/frosty-feud)
+
+
+_TODO:
+list sources for graphics and sounds used_
