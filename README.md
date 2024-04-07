@@ -1,1 +1,5 @@
-Creek
+Frosty Feud
+
+the repo name is a bit misleading, the whole game idea had to be changed after creating this. Sorry about that!
+
+this project is a submission for Games Job Fair Spring 2024 - Unity Programming Challenge
