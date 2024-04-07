@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
-using UnityEngine.Events;
-using UnityEngine.Android;
 
 
 public class ItemSpawner : MonoBehaviour
 {
     [SerializeField]
     private ObstacleController m_obstaclePrefab;
+    private Transform m_obstacleHolder
+    ;
     [SerializeField]
     private Transform m_spawnpointHigh;
     [SerializeField]
@@ -29,6 +29,7 @@ public class ItemSpawner : MonoBehaviour
             collectionCheck: false,
             defaultCapacity: 10
         );
+        m_obstacleHolder = transform.Find("Obstacles").transform;
     }
     public void Spawn(PuzzleConfigSO config)
     {
@@ -54,8 +55,9 @@ public class ItemSpawner : MonoBehaviour
         obstacle.transform.SetPositionAndRotation(spawnPos.position, spawnPos.rotation);
         obstacle.m_onDeleteObstacle += OnObstacleDelete;
     }
-    public void ClearObstacles(){
-        m_obstaclePool.Clear();
+    public void ClearObstacles()
+    {
+        m_obstacleHolder.gameObject.SetActive(false); // TODO Doing this instead of using object pool clear/dispose because those did not work for some reason. Investigate that..
     }
     private void OnObstacleDelete(ObstacleController obstacle)
     {
@@ -63,7 +65,7 @@ public class ItemSpawner : MonoBehaviour
     }
     private ObstacleController CreateObstacle()
     {
-        ObstacleController obstacle = Instantiate(m_obstaclePrefab, Vector2.zero, Quaternion.identity);
+        ObstacleController obstacle = Instantiate(m_obstaclePrefab, Vector2.zero, Quaternion.identity, m_obstacleHolder);
         obstacle.gameObject.SetActive(true);
         return obstacle;
     }
@@ -78,6 +80,7 @@ public class ItemSpawner : MonoBehaviour
     }
     private void OnObstacleDestroy(ObstacleController obstacle)
     {
+        obstacle.gameObject.SetActive(false);
         Destroy(obstacle.gameObject);
     }
 }

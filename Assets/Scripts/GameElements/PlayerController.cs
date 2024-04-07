@@ -8,6 +8,11 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D m_rigidbody;
     private Animator m_animator;
+    private AudioSource m_audioSource;
+    [SerializeField]
+    private AudioClip m_jumpAudio;
+    [SerializeField]
+    private AudioClip m_deathAudio;
     [SerializeField]
     private bool m_grounded;
     private bool m_doubleJumped = false;
@@ -15,6 +20,7 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        m_audioSource = GetComponent<AudioSource>();
         m_rigidbody = GetComponent<Rigidbody2D>();
         m_animator = GetComponentInChildren<Animator>();
     }
@@ -24,6 +30,8 @@ public class PlayerController : MonoBehaviour
         m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, 0f);
         m_rigidbody.AddForce(Vector2.up * 8f, ForceMode2D.Impulse);
         m_animator.SetBool("grounded", false);
+        m_audioSource.clip = m_jumpAudio;
+        m_audioSource.Play();
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -39,6 +47,9 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Obstacle"))
         {
             Debug.Log("Game over");
+            m_animator.SetBool("game_over", true);
+            m_audioSource.clip = m_deathAudio;
+            m_audioSource.Play();
             m_onDeath?.Invoke();
         }
     }
@@ -57,7 +68,6 @@ public class PlayerController : MonoBehaviour
             if (m_grounded)
             {
                 Jump();
-
             }
         }
         if (other.gameObject.CompareTag("Player_doubleJump"))

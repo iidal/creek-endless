@@ -10,8 +10,8 @@ public class BoardManager : MonoBehaviour
 {
     [SerializeField]
     private ItemSpawner m_spawner;
-    private int m_boardWidth = 5;
-    private int m_boardHeight = 5;
+    private int m_boardWidth = 3;
+    private int m_boardHeight = 3;
     [SerializeField]
     private GameObject m_tilePrefab;
     [SerializeField]
@@ -23,9 +23,15 @@ public class BoardManager : MonoBehaviour
     private BoardChecker m_boardChecker;
     [SerializeField]
     private TMP_Text m_boardShuffledText;
+    private AudioSource m_audioSource;
+    [SerializeField]
+    private AudioClip m_tilesAudio;
+    [SerializeField]
+    private AudioClip m_shuffleAudio;
 
     void Start()
     {
+        m_audioSource = GetComponent<AudioSource>();
         m_tiles = new Tile[m_boardWidth, m_boardHeight];
         SetupBoard();
     }
@@ -112,6 +118,7 @@ public class BoardManager : MonoBehaviour
                     selectedTile.TileEffects("clear");
                     selectedTile.OnTileUnselect();
                     selectedTile.m_config = null;
+                    PlaySoundEffect(m_tilesAudio);
                 }
                 m_selectedTiles.Clear();
                 UpdateBoard();
@@ -169,6 +176,7 @@ public class BoardManager : MonoBehaviour
         {
             Debug.Log("NO AVAILABLE MOVES");
             StartCoroutine(BoardShuffledText());
+            PlaySoundEffect(m_shuffleAudio);
             ShuffleBoard();
         }
     }
@@ -212,18 +220,23 @@ public class BoardManager : MonoBehaviour
     IEnumerator BoardShuffledText()
     {
         m_boardShuffledText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(1f);
         m_boardShuffledText.color = new Color(m_boardShuffledText.color.r, m_boardShuffledText.color.g, m_boardShuffledText.color.b, 1);
+        yield return new WaitForSeconds(0.8f);
         float alpha = m_boardShuffledText.color.a;
 
         while (m_boardShuffledText.color.a > 0)
         {
-            alpha -= Time.deltaTime / 1f;
+            alpha -= Time.deltaTime / 0.5f;
             m_boardShuffledText.color = new Color(m_boardShuffledText.color.r, m_boardShuffledText.color.g, m_boardShuffledText.color.b, alpha);
 
-            yield return new WaitForSeconds(0.01f); // Todo0.01 to slow!!!
+            yield return new WaitForSeconds(0.001f);
         }
         m_boardShuffledText.gameObject.SetActive(false);
 
+    }
+    private void PlaySoundEffect(AudioClip clip)
+    {
+        m_audioSource.clip = clip;
+        m_audioSource.Play();
     }
 }

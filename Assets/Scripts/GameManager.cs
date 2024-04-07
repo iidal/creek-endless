@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Drawing;
+using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,6 +20,8 @@ public class GameManager : MonoBehaviour
     private GameObject m_endView;
     [SerializeField]
     private TMP_Text m_finalScoreText;
+    [SerializeField]
+    private List<ScrollingBG> m_backgrounds;
 
     void Start()
     {
@@ -37,9 +38,9 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         m_scoreCounter.StopCounter();
-        m_obstacleSpawner.ClearObstacles(); //TODO does this work?
+        StopBackground();
+        m_obstacleSpawner.ClearObstacles();
         m_obstacleSpawner.enabled = false;
-        //delete all obstacles
         //disable puzzle from touch
         StartCoroutine(ShowEndMenu());
     }
@@ -56,5 +57,11 @@ public class GameManager : MonoBehaviour
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(currentSceneName);
+    }
+    private void StopBackground(){
+        foreach (var item in m_backgrounds)
+        {
+            item.ChangeSpeed(0);
+        }
     }
 }

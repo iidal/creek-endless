@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 public class ScrollingBG : MonoBehaviour
-{ 
+{
     public float m_speed;
     private MeshRenderer m_renderer;
     void Start()
@@ -14,5 +14,9 @@ public class ScrollingBG : MonoBehaviour
     void FixedUpdate()
     {
         m_renderer.material.mainTextureOffset += new Vector2(m_speed * Time.deltaTime, 0);
+    }
+    public void ChangeSpeed(float newSpeed)
+    {
+        m_speed = newSpeed;
     }
 }
